@@ -16,6 +16,7 @@ public class DocumentClient {
                 .body(BodyInserters.fromMultipartData(file.getName(), file))
                 .retrieve().bodyToMono(String.class)
                 .block();
+
     }
     public void delete(String file){
         WebClient client = WebClient.create("http://localhost:8081/" + file);

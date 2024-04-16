@@ -2,36 +2,38 @@ package com.inkhyang.comixapp.application.impl;
 
 import com.inkhyang.comixapp.application.DocumentClient;
 import com.inkhyang.comixapp.application.TitleService;
+import com.inkhyang.comixapp.entity.Chapter;
 import com.inkhyang.comixapp.entity.Title;
+import com.inkhyang.comixapp.entityRepository.ChapterRepository;
 import com.inkhyang.comixapp.entityRepository.TitleRepository;
-import jakarta.transaction.Transactional;
-import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class TitleServiceImpl implements TitleService {
     private final TitleRepository titleRepository;
+    private final ChapterRepository chapterRepository;
     private final DocumentClient client;
 
-    public TitleServiceImpl(TitleRepository titleRepository, DocumentClient client) {
+    public TitleServiceImpl(TitleRepository titleRepository, ChapterRepository chapterRepository, DocumentClient client) {
         this.titleRepository = titleRepository;
+        this.chapterRepository = chapterRepository;
         this.client = client;
     }
-    public Optional<Title> getByName(String name) {
+    public Optional<Title> getTitleByName(String name) {
         return titleRepository.findByName(name);
     }
 
-    public List<Title> getAll() {
+    public List<Title> getAllTitles() {
         return titleRepository.findAll();
     }
 
-    @Transactional
-    public Title create(String name, String genres,
-                        String description, MultipartFile image) {
+    public Title createTitle(String name, String genres, String description, MultipartFile image) {
         Title title = new Title();
         title.setName(name);
         title.setGenres(genres);
@@ -40,18 +42,13 @@ public class TitleServiceImpl implements TitleService {
         return titleRepository.save(title);
     }
 
-    @SneakyThrows
-    @Transactional
-    public void remove(String name) {
+    public void removeTitle(String name) {
         Title title = titleRepository.findByName(name).orElseThrow();
         titleRepository.delete(title);
-        client.delete(name);
+        client.delete(title.getImage());
     }
 
-    @SneakyThrows
-    @Transactional
-    public void update(String name, String newName, String genres,
-                       String description, MultipartFile image) {
+    public void updateTitle(String name, String newName, String genres, String description, MultipartFile image) {
         Title title = titleRepository.findByName(name).orElseThrow();
         title.setName(newName);
         title.setGenres(genres);
@@ -60,4 +57,35 @@ public class TitleServiceImpl implements TitleService {
         title.setImage(client.upload(image));
         titleRepository.save(title);
     }
+
+    public Optional<Chapter> getChapterByNumberAndTitleName(String titleName, Integer number) {
+        return chapterRepository.findChapterByTitleNameAndNumber(titleName, number);
+    }
+
+    public List<Chapter> getAllChaptersByTitleName(String titleName) {
+        return chapterRepository.findAllChaptersByTitleName(titleName);
+    }
+
+    public Chapter createChapter(String titleName, MultipartFile[] files) {
+        Title title = titleRepository.findByName(titleName).orElseThrow();
+        Chapter chapter = new Chapter();
+        List<String> images = Arrays.stream(files)
+                .map(client::upload).toList();
+        chapter.setImages(images);
+        chapter.setDate(LocalDate.now());
+        chapter.setTitle(title);
+        title.getChapters().add(chapter);
+        return chapterRepository.save(chapter);
+    }
+
+    public void removeChapter(String titleName, Integer number) {
+        Title title = titleRepository.findByName(titleName).orElseThrow();
+        chapterRepository.delete(title.getChapters().get(number));
+    }
+
+    public void removeAllChapters(String titleName) {
+        Title title = titleRepository.findByName(titleName).orElseThrow();
+        chapterRepository.deleteAll(title.getChapters());
+    }
+
 }

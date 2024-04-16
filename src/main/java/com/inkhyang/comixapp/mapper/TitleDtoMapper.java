@@ -6,6 +6,7 @@ import org.mapstruct.Mapper;
 
 @Mapper(uses = {ChapterDtoMapper.class})
 public interface TitleDtoMapper {
+
     Title toEntity(TitleDto titleDto);
     TitleDto toDto(Title title);
 }

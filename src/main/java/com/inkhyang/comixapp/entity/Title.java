@@ -1,16 +1,22 @@
 package com.inkhyang.comixapp.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
+import org.hibernate.annotations.UuidGenerator;
 
 import java.util.List;
 import java.util.UUID;
 
-@Data
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table
 public class Title {
     @Id
+    @UuidGenerator(style = UuidGenerator.Style.TIME)
     private UUID id;
     @Column(nullable = false, unique = true)
     private String name;
@@ -18,6 +24,6 @@ public class Title {
     private String description;
     @Column(nullable = false)
     private String image;
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "title", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Chapter> chapters;
 }

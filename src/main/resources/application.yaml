@@ -1,2 +1,17 @@
 server:
   port: 8080
+
+spring:
+  flyway:
+    enable: true
+  jpa:
+    database: postgresql
+    hibernate:
+      ddl-auto: validate
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://ep-purple-sea-a2388wb6.eu-central-1.aws.neon.tech/comspa?schema=public
+    password: postgres
+    username: postgres
