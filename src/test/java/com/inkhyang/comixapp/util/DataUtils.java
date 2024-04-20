@@ -6,11 +6,22 @@ import com.inkhyang.comixapp.entity.Title;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class DataUtils {
 
     public static Title getTitleWithoutChaptersTransient(){
         return Title.builder()
+                .name("title without chapters")
+                .genres("test")
+                .description("test")
+                .image("srr")
+                .chapters(new ArrayList<>())
+                .build();
+    }
+    public static Title getTitleWithoutChaptersPersisted(){
+        return Title.builder()
+                .id(UUID.randomUUID())
                 .name("title without chapters")
                 .genres("test")
                 .description("test")
@@ -42,7 +53,31 @@ public class DataUtils {
         return title;
     }
     public static Chapter getChapterTransient(){
+        var title = Title.builder()
+                .name("title with chapters")
+                .genres("test")
+                .description("test")
+                .image("srr")
+                .chapters(new ArrayList<>())
+                .build();
         return Chapter.builder()
+                .title(title)
+                .number(1)
+                .images(List.of("al", "co", "ho", "lic"))
+                .date(LocalDate.now())
+                .build();
+    }
+    public static Chapter getChapterPersisted(){
+        var title = Title.builder()
+                .name("title with chapters")
+                .genres("test")
+                .description("test")
+                .image("srr")
+                .chapters(new ArrayList<>())
+                .build();
+        return Chapter.builder()
+                .id(UUID.randomUUID())
+                .title(title)
                 .number(1)
                 .images(List.of("al", "co", "ho", "lic"))
                 .date(LocalDate.now())

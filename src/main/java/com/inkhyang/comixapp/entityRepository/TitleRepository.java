@@ -9,4 +9,5 @@ import java.util.UUID;
 public interface TitleRepository extends JpaRepository<Title, UUID> {
     Optional<Title> findByName(String name);
     void deleteByName(String name);
+    boolean existsByName(String name);
 }

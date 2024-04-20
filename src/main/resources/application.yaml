@@ -12,6 +12,6 @@ spring:
     show-sql: true
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://ep-purple-sea-a2388wb6.eu-central-1.aws.neon.tech/comspa?schema=public
+    url: jdbc:postgresql://localhost:5432/comspa?schema=public
     password: postgres
     username: postgres

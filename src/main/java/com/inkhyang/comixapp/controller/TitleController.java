@@ -1,3 +1,4 @@
+/*
 package com.inkhyang.comixapp.controller;
 
 import com.inkhyang.comixapp.application.impl.TitleServiceImpl;
@@ -81,3 +82,4 @@ public class TitleController {
         service.removeChapter(name, number);
     }
 }
+*/

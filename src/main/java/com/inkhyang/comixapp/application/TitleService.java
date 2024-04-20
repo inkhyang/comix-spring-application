@@ -13,7 +13,7 @@ public interface TitleService {
     Title createTitle(String name, String genres,
                  String description, MultipartFile image);
     void removeTitle(String name);
-    void updateTitle(String name, String newName, String genres, String description,
+    Title updateTitle(String name, String newName, String genres, String description,
                 MultipartFile image);
 
     Optional<Chapter> getChapterByNumberAndTitleName(String name, Integer number);

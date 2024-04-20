@@ -2,6 +2,7 @@ package com.inkhyang.comixapp.application.impl;
 
 import com.inkhyang.comixapp.application.DocumentClient;
 import com.inkhyang.comixapp.application.TitleService;
+import com.inkhyang.comixapp.application.exception.TitleNotFoundException;
 import com.inkhyang.comixapp.entity.Chapter;
 import com.inkhyang.comixapp.entity.Title;
 import com.inkhyang.comixapp.entityRepository.ChapterRepository;
@@ -44,18 +45,18 @@ public class TitleServiceImpl implements TitleService {
 
     public void removeTitle(String name) {
         Title title = titleRepository.findByName(name).orElseThrow();
-        titleRepository.delete(title);
+        titleRepository.deleteByName(name);
         client.delete(title.getImage());
     }
 
-    public void updateTitle(String name, String newName, String genres, String description, MultipartFile image) {
-        Title title = titleRepository.findByName(name).orElseThrow();
+    public Title updateTitle(String name, String newName, String genres, String description, MultipartFile image) {
+        Title title = titleRepository.findByName(name).orElse(null);
         title.setName(newName);
         title.setGenres(genres);
         title.setDescription(description);
         client.delete(title.getImage());
         title.setImage(client.upload(image));
-        titleRepository.save(title);
+        return titleRepository.save(title);
     }
 
     public Optional<Chapter> getChapterByNumberAndTitleName(String titleName, Integer number) {
@@ -79,8 +80,8 @@ public class TitleServiceImpl implements TitleService {
     }
 
     public void removeChapter(String titleName, Integer number) {
-        Title title = titleRepository.findByName(titleName).orElseThrow();
-        chapterRepository.delete(title.getChapters().get(number));
+        Chapter chapter = chapterRepository.findChapterByTitleNameAndNumber(titleName, number).orElseThrow();
+        chapterRepository.delete(chapter);
     }
 
     public void removeAllChapters(String titleName) {
