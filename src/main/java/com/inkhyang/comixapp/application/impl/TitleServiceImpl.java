@@ -2,7 +2,6 @@ package com.inkhyang.comixapp.application.impl;
 
 import com.inkhyang.comixapp.application.DocumentClient;
 import com.inkhyang.comixapp.application.TitleService;
-import com.inkhyang.comixapp.application.exception.TitleNotFoundException;
 import com.inkhyang.comixapp.entity.Chapter;
 import com.inkhyang.comixapp.entity.Title;
 import com.inkhyang.comixapp.entityRepository.ChapterRepository;

@@ -1,4 +1,3 @@
-/*
 package com.inkhyang.comixapp.controller;
 
 import com.inkhyang.comixapp.application.impl.TitleServiceImpl;
@@ -25,11 +24,13 @@ public class TitleController {
         this.chapterMapper = chapterMapper;
     }
 
-    @GetMapping("/{name}")
-    public TitleDto one(@PathVariable String name){
-        return service.getTitleByName(name)
-                .map(titleMapper::toDto)
-                .orElseThrow();
+    @PostMapping
+    public TitleDto create(@RequestBody TitleDto titleDto){
+        Title title = service.createTitle(
+                titleDto.name(), titleDto.genres(),
+                titleDto.description(), titleDto.image()
+        );
+        return titleMapper.toDto(title);
     }
     @GetMapping
     public List<TitleDto> all(){
@@ -37,14 +38,11 @@ public class TitleController {
                 .map(titleMapper::toDto)
                 .toList();
     }
-    @PostMapping
-    public TitleDto create(@RequestBody TitleDto titleDto){
-
-        Title title = service.createTitle(
-                titleDto.name(), titleDto.genres(),
-                titleDto.description(), titleDto.image()
-        );
-        return titleMapper.toDto(title);
+    @GetMapping("/{name}")
+    public TitleDto one(@PathVariable String name){
+        return service.getTitleByName(name)
+                .map(titleMapper::toDto)
+                .orElseThrow();
     }
     @PutMapping("/{name}")
     public void update(@PathVariable String name, @RequestBody TitleDto titleDto){
@@ -59,6 +57,11 @@ public class TitleController {
         service.removeTitle(name);
     }
 
+    @PostMapping("/{name}")
+    public ChapterDto createChapter(@PathVariable String name, @RequestBody ChapterDto chapterDto){
+        Chapter chapter = service.createChapter(name, chapterDto.files());
+        return chapterMapper.toDto(chapter);
+    }
     @GetMapping("/{name}/chapters")
     public List<ChapterDto> allChapters(@PathVariable String name){
         return service.getAllChaptersByTitleName(name).stream()
@@ -71,15 +74,9 @@ public class TitleController {
                 .map(chapterMapper::toDto)
                 .orElseThrow();
     }
-    @PostMapping("/{name}")
-    public ChapterDto createChapter(@PathVariable String name, @RequestBody ChapterDto chapterDto){
-        Chapter chapter = service.createChapter(name, chapterDto.files());
-        return chapterMapper.toDto(chapter);
-    }
 
     @DeleteMapping("/{name}/chapter/{number}")
     public void deleteChapter(@PathVariable String name, @PathVariable Integer number){
         service.removeChapter(name, number);
     }
 }
-*/

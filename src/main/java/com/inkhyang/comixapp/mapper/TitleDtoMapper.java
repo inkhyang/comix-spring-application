@@ -1,4 +1,3 @@
-/*
 package com.inkhyang.comixapp.mapper;
 
 import com.inkhyang.comixapp.dto.TitleDto;
@@ -11,4 +10,3 @@ public interface TitleDtoMapper {
     Title toEntity(TitleDto titleDto);
     TitleDto toDto(Title title);
 }
-*/
